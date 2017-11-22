@@ -7,4 +7,5 @@
     <string name="edit_book_author">Author</string>
     <string name="edit_book_publisher">Publisher</string>
     <string name="list_books_error_no_books">You have no books</string>
+    <string name="delete_book">Delete book button</string>
 </resources>

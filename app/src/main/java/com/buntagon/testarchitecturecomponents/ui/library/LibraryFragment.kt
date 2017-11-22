@@ -35,11 +35,15 @@ class LibraryFragment : Fragment() {
         val viewModel = ViewModelProviders.of(activity).get(LibraryViewModel::class.java)
 
         // Set the item click listener
-        val listener : (Book) -> Unit = { book ->
-            viewModel.setSelected(book.id)
+        val selectListener : (Book) -> Unit = { book ->
+            viewModel.editBook(book.id)
         }
 
-        val adapter = BookAdapter(books, listener)
+        val deleteListener: (Book) -> Unit = { book ->
+            viewModel.delete(book)
+        }
+
+        val adapter = BookAdapter(books, selectListener, deleteListener)
 
         // Set the adapter
         if (view is RecyclerView) {

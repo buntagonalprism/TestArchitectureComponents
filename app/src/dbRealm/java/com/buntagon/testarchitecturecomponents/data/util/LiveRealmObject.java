@@ -23,6 +23,7 @@ public class LiveRealmObject<T extends RealmModel> extends StaticLiveData<T> {
 
     public LiveRealmObject(T realmResults) {
         results = realmResults;
+        setValue(results);
     }
 
     @Override

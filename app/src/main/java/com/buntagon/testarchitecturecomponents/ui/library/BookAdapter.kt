@@ -7,17 +7,18 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.buntagon.testarchitecturecomponents.R
 import com.buntagon.testarchitecturecomponents.data.model.Book
+import kotlinx.android.synthetic.main.fragment_item.view.*
 
 /**
 
  */
-class BookAdapter(private var mValues: MutableList<Book>, private val mListener: (Book) -> Unit) : RecyclerView.Adapter<BookAdapter.ViewHolder>() {
+class BookAdapter(private var mValues: List<Book>, private val mSelectListener: (Book) -> Unit, private val mDeleteListener: (Book) -> Unit) : RecyclerView.Adapter<BookAdapter.ViewHolder>() {
 
     override fun getItemCount(): Int {
         return mValues.size
     }
 
-    fun setData(newBooks: MutableList<Book>) {
+    fun setData(newBooks: List<Book>) {
         mValues = newBooks
         notifyDataSetChanged()
     }
@@ -30,20 +31,21 @@ class BookAdapter(private var mValues: MutableList<Book>, private val mListener:
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val book = mValues[position]
-        holder.mItem = book
-        holder.mIdView.text = book.title
-        holder.mContentView.text = book.description
-
-        holder.mView.setOnClickListener {
-            mListener(book)
-        }
+        holder.bind(book)
     }
 
-    inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
+    inner class ViewHolder(private val mView: View) : RecyclerView.ViewHolder(mView)  {
 
-        val mIdView : TextView = mView.findViewById<View>(R.id.id) as TextView
-        val mContentView: TextView = mView.findViewById<View>(R.id.content) as TextView
-        var mItem: Book? = null
+        fun bind(book: Book) = with (mView) {
+            tv_title.text = book.title
+            tv_description.text = book.description
+            ll_content.setOnClickListener {
+                mSelectListener(book)
+            }
+            iv_delete.setOnClickListener{
+                mDeleteListener(book)
+            }
+        }
 
     }
 }

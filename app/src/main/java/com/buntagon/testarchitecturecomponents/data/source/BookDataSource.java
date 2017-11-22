@@ -1,6 +1,7 @@
 package com.buntagon.testarchitecturecomponents.data.source;
 
 import com.buntagon.testarchitecturecomponents.data.model.Book;
+import com.buntagon.testarchitecturecomponents.data.util.BaseDataSource;
 import com.buntagon.testarchitecturecomponents.data.util.StaticLiveData;
 
 import java.util.List;
@@ -10,16 +11,8 @@ import java.util.List;
  * Created by t on 19/11/2017.
  */
 
-public interface BookDataSource {
+public interface BookDataSource extends BaseDataSource<Book> {
 
     void sync();
-
-    void insertOrUpdate(Book book);
-
-    void delete(String id);
-
-    StaticLiveData<Book> get(String id);
-
-    StaticLiveData<List<Book>> getAll();
 
 }

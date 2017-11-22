@@ -19,7 +19,7 @@ open class Book : RealmObject(), SyncedItem {
     var description : String = ""
 
     @PrimaryKey
-    private var id: String = ""
+    private var id: String = UUID.randomUUID().toString()
     private var lastUpdate: Long = -1
     private var isSynced: Boolean = false
 

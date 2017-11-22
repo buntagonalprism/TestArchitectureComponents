@@ -18,20 +18,27 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         title = "My Books"
         // Create new fragment and transaction
-        popOrCreateToMasterScreen()
+        createMasterScreen()
 
-        // TODO: Enable back navigation
 
         val viewModel = ViewModelProviders.of(this).get(LibraryViewModel::class.java)
-        viewModel.getSelected().observe(this, Observer{ _ ->
-            title = "Edit Book"
-            goToDetailScreen()
-        })
 
+        // Add new book
         fab_add_task.setOnClickListener {
             title = "Create Book"
             goToDetailScreen()
         }
+
+        // Edit book
+        viewModel.editEvent.observe(this, Observer {
+            title = "Edit Book"
+            goToDetailScreen()
+        })
+
+        // Back navigation after adding / editing book
+        viewModel.saveCompleteEvent.observe(this, Observer {
+            onBackPressed()
+        })
     }
 
     override fun onBackPressed() {
@@ -41,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         super.onBackPressed()
     }
 
-    private fun popOrCreateToMasterScreen() {
+    private fun createMasterScreen() {
         fab_add_task.visibility = View.VISIBLE
         val newFragment = LibraryFragment()
         val transaction = supportFragmentManager.beginTransaction()

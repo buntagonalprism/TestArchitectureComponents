@@ -26,6 +26,9 @@ public class MutableRealmObject<T extends RealmModel> extends MutableLiveData<T>
 
     MutableRealmObject(T realmResults) {
         results = realmResults;
+        Realm realm = Realm.getDefaultInstance();
+        setValue(realm.copyFromRealm(results));
+        realm.close();
     }
 
     @Override

@@ -16,12 +16,34 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    flavorDimensions "dbProvider"
+
+    productFlavors {
+        dbRealm {
+            dimension "dbProvider"
+        }
+
+        dbRoom {
+            dimension "dbProvider"
+        }
+
+        dbObjectBox {
+            dimension "dbProvider"
+        }
+
+        dbDbFlow {
+            dimension "dbProvider"
+        }
+    }
+
 }
 
 dependencies {

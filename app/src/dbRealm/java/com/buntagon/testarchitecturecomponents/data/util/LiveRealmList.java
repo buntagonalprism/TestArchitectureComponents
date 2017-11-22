@@ -12,16 +12,24 @@ import io.realm.RealmResults;
 /**
  * Class connecting the Realm lifecycle to that of LiveData objects.
  */
-public class MutableRealmList<T extends RealmModel> extends MutableLiveData<List<T>> {
+public class LiveRealmList<T extends RealmModel> extends StaticLiveData<List<T>> {
 
     private RealmResults<T> results;
     private final RealmChangeListener<RealmResults<T>> listener = new RealmChangeListener<RealmResults<T>>() {
         @Override
-        public void onChange(@NonNull RealmResults<T> results) { setValue(results);}
+        public void onChange(@NonNull RealmResults<T> results) {
+            setValue(results);
+        }
     };
 
-    MutableRealmList(RealmResults<T> realmResults) {
+    public LiveRealmList(RealmResults<T> realmResults) {
         results = realmResults;
+        setValue(results);
+    }
+
+    @Override
+    public MutableLiveData<List<T>> getEditable() {
+        return new MutableRealmList<>(results);
     }
 
     @Override
