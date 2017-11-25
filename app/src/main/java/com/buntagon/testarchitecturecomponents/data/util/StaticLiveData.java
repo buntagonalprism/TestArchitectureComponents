@@ -10,6 +10,6 @@ import android.arch.lifecycle.MutableLiveData;
 
 public abstract class StaticLiveData<T> extends LiveData<T> {
 
-    public abstract MutableLiveData<T> getEditable();
+    public abstract LiveData<T> getEditable();
 
 }

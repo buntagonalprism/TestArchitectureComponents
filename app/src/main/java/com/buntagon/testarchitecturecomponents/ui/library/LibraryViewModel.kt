@@ -1,5 +1,6 @@
 package com.buntagon.testarchitecturecomponents.ui.library
 
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.buntagon.testarchitecturecomponents.data.model.Book
@@ -15,23 +16,23 @@ class LibraryViewModel : ViewModel() {
 
     private val mRepository = BookRepository()
 
-    val books : StaticLiveData<MutableList<Book>> = mRepository.all
+    val books : StaticLiveData<MutableList<Book>> = mRepository.getAll()
 
     val saveCompleteEvent = SingleLiveEvent<Void>()
     val editEvent = SingleLiveEvent<Void>()
 
-    private var selectedBook = MutableLiveData<Book>()
+    private var selectedBook : LiveData<Book> = MutableLiveData<Book>()
 
-    fun getSelected() : MutableLiveData<Book> {
+    fun getSelected() : LiveData<Book> {
         return selectedBook
     }
     fun editBook(id: String) {
-        selectedBook.value = mRepository.get(id).editable.value
+        selectedBook = mRepository.get(id).editable
         editEvent.call()
     }
 
     fun delete(book: Book) {
-        mRepository.delete(book.id)
+        mRepository.delete(book)
     }
 
     override fun onCleared() {
@@ -42,7 +43,7 @@ class LibraryViewModel : ViewModel() {
     fun saveBook(book: Book) {
         mRepository.insertOrUpdate(book)
         saveCompleteEvent.call()
-        selectedBook.value = null
+        selectedBook = MutableLiveData<Book>()
     }
 
 
