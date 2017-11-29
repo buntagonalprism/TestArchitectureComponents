@@ -3,6 +3,7 @@ package com.buntagon.testarchitecturecomponents.ui
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.buntagon.testarchitecturecomponents.R
@@ -11,12 +12,25 @@ import com.buntagon.testarchitecturecomponents.ui.library.LibraryFragment
 import com.buntagon.testarchitecturecomponents.ui.library.LibraryViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
+
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        setSupportActionBar(toolbar)
+
+        val mDrawerToggle = ActionBarDrawerToggle(
+                this, drawer_layout, toolbar, R.string.action_open, R.string.action_close        )
+        drawer_layout.addDrawerListener(mDrawerToggle)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setHomeButtonEnabled(true)
+        mDrawerToggle.syncState()
+
         title = "My Books"
+
+
         // Create new fragment and transaction
         createMasterScreen()
 

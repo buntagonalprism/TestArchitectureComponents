@@ -1,11 +1,77 @@
-<resources>
+<resources xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <!-- Inheriting any variant of Theme.AppCompat provides support for automatica color-tinting
+    our widgets using primay, dark and accent colours -->
+    <!-- Light modifier means that we use dark text on light backgrounds -->
+    <!-- No action bar means that the standard activity action bar is not included by default, and
+    we can include our own support action bar if we so choose within an activity -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <!-- Apply a default style for navigation drawer toggles -->
+        <!-- Recall that using the new Toolbar libraries there will not be a navigation drawer
+        toggle or up-arrow for navigation unless we explicitly add them-->
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+
+        <!-- Change colour of title text field in toolbars -->
+        <item name="titleTextColor">@android:color/white</item>
+
+        <!-- Big news! This is why we don't use android:someAttribute
+        So android defines a huge list of attributes in R.attr. This is the full list of all
+        attributes which the standard android views support. Each standard android view will
+        recognise some of these attributes and not others, and use the value to configure how it
+        draws itself. Whenever we want to tap into one of these attributes in the latest android
+        version we need to prefix it with the standard android:someValue namespace. For example
+        android:titleTextColor was introduced in API 23.
+        https://developer.android.com/reference/android/R.attr.html#titleTextColor
+
+        So only if our target SDK is >= 23 can we
+        put android:titleTextColor into a theme or style, otherwise its not defined in our R.attr
+
+        By contrast, the textColor attribute was added in api level 1, so we can safely go ahead and
+        directly set the value of this attribute whenever / whereever we like (as long as we are
+        targeting SDK >= 1 LOL)
+        https://developer.android.com/reference/android/R.attr.html#textColor
+
+        However, we also have the support library. This was supposed to provide the new
+        functionality for earlier versions. It turns out AppCompatActivity isn't just a way to get
+        the new toolbars and some new widgets like coordinator layout and recycler view. It also
+        does a whole lot of work behind the scenes translating theme attributes
+
+        Normally, all attributes have to be given a namespace, but the AppCompatActivity picks up
+        the attributes without a namespace and translates them into compatability mode versions
+
+        So basically, whenever we would need to use app:someNewProperty="Value" within the layout
+        xml, when setting that attribute in a theme or style we just drop the namespace alltogther
+        <item name="someNewProperty">Value</item> and the AppCompatActivity will handle translating
+        it into the correct support attribute in the background.
+
+        Note that while we don't get IDE suggestions for these names since they are not truly part
+        of a namespace, the compiler will tell us when we have tried to use an attribute which is
+        not defined. For example, even when we have custom views which we have defined our own
+        custom style attributes for, when setting them in layout XML we first need to import the
+        namespace (using them in themes is a bit more convulted - it requires defining new
+        attributes allowed to be added to the theme as well
+
+
+        -->
+    </style>
+
+
+
+    <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <!-- If we are consistently keeping the navigation drawer floating above the toolbar rather
+        than underneath it, there is no benefit to having that nice funky animation of the hamburger
+        icon turning into the back arrow to close the navigation drawer, since it will be covered up
+        by the drawer anyway -->
+        <!-- Looks like it still does this by default though whether or not we set it to true -->
+        <!-- Spin bars defaults to true if we follow the Widget.AppCompat.DrawerArrowToggle styling
+        back up a few levels. With spin bars = false, a different, gentler animation is used -->
+        <item name="spinBars">false</item>
+        <item name="color">@android:color/white</item>
     </style>
 
 </resources>

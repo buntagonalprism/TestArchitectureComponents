@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_books"
+        android:icon="@drawable/ic_books"
+        android:title="@string/nav_option_books" />
+    <item
+        android:id="@+id/nav_authors"
+        android:icon="@drawable/ic_authors"
+        android:title="@string/nav_option_authors" />
+    <item
+        android:id="@+id/nav_publishers"
+        android:icon="@drawable/ic_publishers"
+        android:title="@string/nav_option_publishers" />
+</menu>

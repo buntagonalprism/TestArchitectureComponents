@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">TestArchitectureComponents</string>
-
+    <string name="action_close">Close</string>
+    <string name="action_open">Open</string>
     <string name="action_save">Save</string>
     <string name="edit_book_title">Title</string>
     <string name="edit_book_description">Description</string>
@@ -8,4 +9,8 @@
     <string name="edit_book_publisher">Publisher</string>
     <string name="list_books_error_no_books">You have no books</string>
     <string name="delete_book">Delete book button</string>
+    <string name="nav_option_books">Books</string>
+    <string name="nav_option_authors">Authors</string>
+    <string name="nav_option_publishers">Publishers</string>
+    <string name="nav_header_books">My Library</string>
 </resources>

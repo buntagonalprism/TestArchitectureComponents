@@ -29,4 +29,7 @@ public interface BookDao {
 
     @Delete
     void delete(Book book);
+
+    @Query("select * from Book where title like :title")
+    LiveData<List<Book>> searchBooks(String title);
 }
