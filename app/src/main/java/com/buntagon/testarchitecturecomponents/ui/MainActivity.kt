@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private var mDrawerToggle: BackAnimatedDrawerToggle? = null
+//    private var mDrawerToggle: BackAnimatedDrawerToggle? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,15 +73,12 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-
     private fun initNavigationDrawerToggle() {
         setSupportActionBar(toolbar)
-
-        mDrawerToggle = BackAnimatedDrawerToggle(this, toolbar, drawer_layout, {
+        toolbar?.attachDrawer(this, drawer_layout, {
             onBackPressed()
         })
-        mDrawerToggle!!.showDrawerToggle()
+        toolbar?.showDrawerToggle()
     }
 
     private fun initNavigationOptions() {
@@ -98,17 +95,17 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         // Super call will pop fragment back-stack or close app if there is no back-stack
         super.onBackPressed()
-        mDrawerToggle?.showDrawerToggle()
+        toolbar?.showDrawerToggle()
     }
 
     private fun loadInnerFragment(newFragment: Fragment) {
         loadFragment(newFragment, true)
-        mDrawerToggle?.showBackArrow()
+        toolbar?.showBackArrow()
     }
 
     private fun loadOuterFragment(newFragment: Fragment) {
         loadFragment(newFragment, true)
-        mDrawerToggle?.showDrawerToggle()
+        toolbar?.showDrawerToggle()
     }
 
 
