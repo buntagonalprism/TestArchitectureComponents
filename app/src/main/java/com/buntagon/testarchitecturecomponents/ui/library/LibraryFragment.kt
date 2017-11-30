@@ -4,15 +4,14 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.buntagon.testarchitecturecomponents.R
 import com.buntagon.testarchitecturecomponents.data.model.Book
-import java.util.*
+import com.buntagon.testarchitecturecomponents.ui.MainActivityViewModel
+import kotlinx.android.synthetic.main.fragment_books.*
 
 
 /**
@@ -20,49 +19,52 @@ import java.util.*
  */
 
 class LibraryFragment : Fragment() {
-    // TODO: Customize parameters
-    private var mColumnCount = 1
-
-    private var books : MutableList<Book> = Arrays.asList(Book(), Book(), Book())
-    
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.fragment_books, container, false)
+        return inflater!!.inflate(R.layout.fragment_books, container, false)
+    }
 
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         // Get the view model
-        val viewModel = ViewModelProviders.of(activity).get(LibraryViewModel::class.java)
+        val booksViewModel = ViewModelProviders.of(activity).get(LibraryViewModel::class.java)
 
         // Set the item click listener
         val selectListener : (Book) -> Unit = { book ->
-            viewModel.editBook(book.id)
+            booksViewModel.editBook(book.id)
         }
 
         val deleteListener: (Book) -> Unit = { book ->
-            viewModel.delete(book)
+            booksViewModel.delete(book)
         }
-
-        val adapter = BookAdapter(books, selectListener, deleteListener)
 
         // Set the adapter
-        if (view is RecyclerView) {
-            val context = view.getContext()
-            if (mColumnCount <= 1) {
-                view.layoutManager= LinearLayoutManager(context)
-            } else {
-                view.layoutManager = GridLayoutManager(context, mColumnCount)
-            }
-            view.adapter = adapter
-        }
+        val adapter = BookAdapter(selectListener, deleteListener)
+        rv_list.layoutManager= LinearLayoutManager(view?.context)
+        rv_list.adapter = adapter
+
 
         // Observe data changes and update adapter
-        viewModel.books.observe(this, Observer { newBooks ->
-            newBooks.let { adapter.setData(newBooks!!) }
+        booksViewModel.books.observe(this, Observer { newBooks ->
+            newBooks.let {
+                adapter.setData(newBooks!!)
+            }
         })
 
+        // Add books
+        fab_add_book.setOnClickListener {
+            booksViewModel.createBook()
+        }
 
-        return view
+        setTitle()
+
+    }
+
+    private fun setTitle() {
+        val activityViewModel = ViewModelProviders.of(activity).get(MainActivityViewModel::class.java)
+        activityViewModel.activityTitle.value = resources.getString(R.string.title_books_list)
     }
 
 }

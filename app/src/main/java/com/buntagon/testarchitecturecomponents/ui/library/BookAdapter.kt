@@ -11,7 +11,9 @@ import kotlinx.android.synthetic.main.item_book.view.*
 /**
 
  */
-class BookAdapter(private var mValues: List<Book>, private val mSelectListener: (Book) -> Unit, private val mDeleteListener: (Book) -> Unit) : RecyclerView.Adapter<BookAdapter.ViewHolder>() {
+class BookAdapter(private val mSelectListener: (Book) -> Unit, private val mDeleteListener: (Book) -> Unit) : RecyclerView.Adapter<BookAdapter.ViewHolder>() {
+
+    private var mValues: List<Book> = ArrayList()
 
     override fun getItemCount(): Int {
         return mValues.size

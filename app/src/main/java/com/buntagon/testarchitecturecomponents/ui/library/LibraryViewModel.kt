@@ -20,6 +20,7 @@ class LibraryViewModel : ViewModel() {
 
     val saveCompleteEvent = SingleLiveEvent<Void>()
     val editEvent = SingleLiveEvent<Void>()
+    val createEvent = SingleLiveEvent<Void>()
 
     private var selectedBook : LiveData<Book> = MutableLiveData<Book>()
 
@@ -27,8 +28,13 @@ class LibraryViewModel : ViewModel() {
         return selectedBook
     }
     fun editBook(id: String) {
-        selectedBook = mRepository.get(id).editable
+        selectedBook = mRepository[id].editable
         editEvent.call()
+    }
+
+    fun createBook() {
+        selectedBook = MutableLiveData<Book>()
+        createEvent.call()
     }
 
     fun delete(book: Book) {

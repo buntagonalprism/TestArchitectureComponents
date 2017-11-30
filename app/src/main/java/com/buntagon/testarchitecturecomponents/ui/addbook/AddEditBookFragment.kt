@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.buntagon.testarchitecturecomponents.R
 import com.buntagon.testarchitecturecomponents.data.model.Book
+import com.buntagon.testarchitecturecomponents.ui.MainActivityViewModel
 import com.buntagon.testarchitecturecomponents.ui.library.LibraryViewModel
 import kotlinx.android.synthetic.main.fragment_add_edit_book.*
 
@@ -29,7 +30,7 @@ class AddEditBookFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // Get the view model
         val viewModel = ViewModelProviders.of(activity).get(LibraryViewModel::class.java)
-
+        setTitle(R.string.title_book_create)
         viewModel.getSelected().observe(this, Observer { editBook ->
             editBook?.let {
                 book = editBook
@@ -37,6 +38,7 @@ class AddEditBookFragment : Fragment() {
                 et_author.setText(book.author)
                 et_description.setText(book.description)
                 et_publisher.setText(book.published.toString())
+                setTitle(R.string.title_book_edit)
             }
         })
 
@@ -46,5 +48,11 @@ class AddEditBookFragment : Fragment() {
             book.description = et_description.text.toString()
             viewModel.saveBook(book)
         }
+    }
+
+
+    private fun setTitle(titleResource: Int) {
+        val activityViewModel = ViewModelProviders.of(activity).get(MainActivityViewModel::class.java)
+        activityViewModel.activityTitle.value = resources.getString(titleResource)
     }
 }

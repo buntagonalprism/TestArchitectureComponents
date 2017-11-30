@@ -22,7 +22,7 @@ class AuthorsViewModel : ViewModel() {
         val author2 = Author()
         author2.name = "Eoin Colfter"
         author2.age = 28
-        authorsList.add(author1)
+        authorsList.add(author2)
         authors = MutableLiveData<MutableList<Author>>()
         authors.value = authorsList
     }

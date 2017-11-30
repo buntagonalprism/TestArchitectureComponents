@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">TestArchitectureComponents</string>
+    <string name="action_back">Back</string>
     <string name="action_close">Close</string>
     <string name="action_open">Open</string>
     <string name="action_save">Save</string>
@@ -13,4 +14,10 @@
     <string name="nav_option_authors">Authors</string>
     <string name="nav_option_publishers">Publishers</string>
     <string name="nav_header_books">My Library</string>
+    <string name="title_books_list">My Books</string>
+    <string name="title_book_create">New Book</string>
+    <string name="title_book_edit">Edit Book</string>
+    <string name="title_authors_list">Authors</string>
+    <string name="title_author_create">New Author</string>
+    <string name="title_author_edit">Edit Author</string>
 </resources>
