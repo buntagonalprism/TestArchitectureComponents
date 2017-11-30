@@ -7,16 +7,19 @@
     <!-- No action bar means that the standard activity action bar is not included by default, and
     we can include our own support action bar if we so choose within an activity -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
+        <!-- Customize your theme here. As per below, because these are very recent additions to the
+        android attributes list, we use their compatability version i.e. minus the 'android'
+        namespace, and allow the AppCompat theme and activity to apply them as required -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
         <!-- Apply a default style for navigation drawer toggles -->
         <!-- Recall that using the new Toolbar libraries there will not be a navigation drawer
-        toggle or up-arrow for navigation unless we explicitly add them-->
+        toggle or up-arrow for navigation unless we explicitly add them in the activity-->
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
 
-        <!-- Change colour of title text field in toolbars -->
+        <!-- Apply a default style for the colour of title text in toolbars -->
         <item name="titleTextColor">@android:color/white</item>
 
         <!-- Big news! This is why we don't use android:someAttribute
@@ -56,6 +59,10 @@
         namespace (using them in themes is a bit more convulted - it requires defining new
         attributes allowed to be added to the theme as well
 
+        Crucially however, this auto-translation of compatability attributes from our styles/themes
+        to apply to our views only works if our base app theme extends one of the `Theme.AppCompat`
+        themes and our activities use AppCompatActivity. Without these, the auto-translation will
+        not occur properly and our style attributes will not take effect.
 
         -->
     </style>
