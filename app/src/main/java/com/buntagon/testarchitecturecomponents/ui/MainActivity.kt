@@ -11,7 +11,6 @@ import com.buntagon.testarchitecturecomponents.ui.authors.AuthorsFragment
 import com.buntagon.testarchitecturecomponents.ui.authors.AuthorsViewModel
 import com.buntagon.testarchitecturecomponents.ui.library.LibraryFragment
 import com.buntagon.testarchitecturecomponents.ui.library.LibraryViewModel
-import com.buntagon.testarchitecturecomponents.util.BackAnimatedDrawerToggle
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -75,7 +74,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initNavigationDrawerToggle() {
         setSupportActionBar(toolbar)
-        toolbar?.attachDrawer(this, drawer_layout, {
+        toolbar?.attachDrawer(drawer_layout, {
             onBackPressed()
         })
         toolbar?.showDrawerToggle()
