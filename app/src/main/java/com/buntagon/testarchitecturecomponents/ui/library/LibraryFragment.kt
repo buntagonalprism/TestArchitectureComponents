@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import com.buntagon.testarchitecturecomponents.R
 import com.buntagon.testarchitecturecomponents.data.model.Book
 import com.buntagon.testarchitecturecomponents.ui.MainActivityViewModel
-import com.buntagon.testarchitecturecomponents.util.replaceObserver
 import kotlinx.android.synthetic.main.fragment_books.*
 
 
@@ -21,8 +20,8 @@ import kotlinx.android.synthetic.main.fragment_books.*
 
 class LibraryFragment : Fragment() {
     
-    var mAdapter: BookAdapter? = null
-    var mViewModel: LibraryViewModel? = null
+    private var mAdapter: BookAdapter? = null
+    private var mViewModel: LibraryViewModel? = null
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

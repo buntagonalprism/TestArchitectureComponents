@@ -9,6 +9,7 @@ import com.buntagon.testarchitecturecomponents.data.util.RoomLiveListData
 import com.buntagon.testarchitecturecomponents.data.util.StaticListLiveData
 import com.buntagon.testarchitecturecomponents.data.util.StaticLiveData
 import kotlinx.coroutines.experimental.launch
+import java.util.*
 
 /**
  * Repository using Room
@@ -24,16 +25,19 @@ class BookRepository : BookDataSource {
     }
 
     override fun insertOrUpdate(item: Book) {
+        item.lastUpdate = Date().time
         launch {
             bookDao.insert(item)
         }
     }
 
     override fun insertOrUpdate(items: List<Book>) {
+        for (book in items) {
+            book.lastUpdate = Date().time
+        }
         launch {
             bookDao.insertAll(items)
         }
-
     }
 
     override fun delete(book: Book) {

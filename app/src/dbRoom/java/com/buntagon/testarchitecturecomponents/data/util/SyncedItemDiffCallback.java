@@ -44,5 +44,6 @@ public class SyncedItemDiffCallback<T extends SyncedItem> extends DiffUtil.Callb
     @Override
     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
         return oldItems.get(oldItemPosition).getLastUpdate() == newItems.get(newItemPosition).getLastUpdate();
+        //return false;
     }
 }

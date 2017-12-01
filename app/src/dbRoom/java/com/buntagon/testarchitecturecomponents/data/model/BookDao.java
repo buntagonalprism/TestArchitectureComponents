@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Dao
 public interface BookDao {
-    @Query("select * from Book")
+    @Query("select * from Book order by title")
     LiveData<List<Book>> getAllBooks();
 
     @Query("select * from Book where id = :id")
