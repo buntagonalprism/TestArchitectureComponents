@@ -5,6 +5,8 @@ import com.buntagon.testarchitecturecomponents.MyApplication
 import com.buntagon.testarchitecturecomponents.data.model.Book
 import com.buntagon.testarchitecturecomponents.data.model.BookDao
 import com.buntagon.testarchitecturecomponents.data.util.RoomLiveData
+import com.buntagon.testarchitecturecomponents.data.util.RoomLiveListData
+import com.buntagon.testarchitecturecomponents.data.util.StaticListLiveData
 import com.buntagon.testarchitecturecomponents.data.util.StaticLiveData
 import kotlinx.coroutines.experimental.launch
 
@@ -46,7 +48,7 @@ class BookRepository : BookDataSource {
     }
 
 
-    override fun getAll(): StaticLiveData<MutableList<Book>> = RoomLiveData(bookDao.allBooks)
+    override fun getAll(): StaticListLiveData<Book> = RoomLiveListData(bookDao.allBooks)
 
 
     override fun close() {

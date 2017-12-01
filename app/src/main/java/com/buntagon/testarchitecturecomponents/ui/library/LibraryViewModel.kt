@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.buntagon.testarchitecturecomponents.data.model.Book
 import com.buntagon.testarchitecturecomponents.data.source.BookRepository
+import com.buntagon.testarchitecturecomponents.data.util.StaticListLiveData
 import com.buntagon.testarchitecturecomponents.data.util.StaticLiveData
 import com.buntagon.testarchitecturecomponents.util.SingleLiveEvent
 
@@ -16,7 +17,7 @@ class LibraryViewModel : ViewModel() {
 
     private val mRepository = BookRepository()
 
-    val books : StaticLiveData<MutableList<Book>> = mRepository.getAll()
+    val books : StaticListLiveData<Book> = mRepository.getAll()
 
     val saveCompleteEvent = SingleLiveEvent<Void>()
     val editEvent = SingleLiveEvent<Void>()

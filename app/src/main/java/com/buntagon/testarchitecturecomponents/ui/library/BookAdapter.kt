@@ -21,7 +21,7 @@ class BookAdapter(private val mSelectListener: (Book) -> Unit, private val mDele
 
     fun setData(newBooks: List<Book>) {
         mValues = newBooks
-        notifyDataSetChanged()
+//        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

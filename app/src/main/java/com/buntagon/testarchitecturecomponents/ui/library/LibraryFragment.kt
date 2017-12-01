@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import com.buntagon.testarchitecturecomponents.R
 import com.buntagon.testarchitecturecomponents.data.model.Book
 import com.buntagon.testarchitecturecomponents.ui.MainActivityViewModel
+import com.buntagon.testarchitecturecomponents.util.replaceObserver
 import kotlinx.android.synthetic.main.fragment_books.*
 
 
@@ -19,47 +20,61 @@ import kotlinx.android.synthetic.main.fragment_books.*
  */
 
 class LibraryFragment : Fragment() {
+    
+    var mAdapter: BookAdapter? = null
+    var mViewModel: LibraryViewModel? = null
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Get the view model
+        mViewModel = ViewModelProviders.of(activity).get(LibraryViewModel::class.java)
+
+        // Set the item click listener
+        val selectListener : (Book) -> Unit = { book ->
+            mViewModel?.editBook(book.id)
+        }
+
+        val deleteListener: (Book) -> Unit = { book ->
+            mViewModel?.delete(book)
+        }
+
+        // Set the adapter
+        mAdapter = BookAdapter(selectListener, deleteListener)
+
+        // Observe data changes and update adapter as needed
+        mViewModel?.books?.observe(this, Observer { newBooks ->
+            newBooks.let {
+                mAdapter?.setData(newBooks!!)
+                mViewModel?.books?.applyChangesToAdapter(mAdapter)
+            }
+        })
+        
+    }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater!!.inflate(R.layout.fragment_books, container, false)
     }
 
+    /**
+     * Under a live data model, onViewCreated does not have many responsibilities - mostly binding
+     * adapters and click listeners. Populating adapters with data, or loading values into fields,
+     * should be done with observer callbacks
+     */
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Get the view model
-        val booksViewModel = ViewModelProviders.of(activity).get(LibraryViewModel::class.java)
-
-        // Set the item click listener
-        val selectListener : (Book) -> Unit = { book ->
-            booksViewModel.editBook(book.id)
-        }
-
-        val deleteListener: (Book) -> Unit = { book ->
-            booksViewModel.delete(book)
-        }
-
-        // Set the adapter
-        val adapter = BookAdapter(selectListener, deleteListener)
         rv_list.layoutManager= LinearLayoutManager(view?.context)
-        rv_list.adapter = adapter
+        rv_list.adapter = mAdapter
 
-
-        // Observe data changes and update adapter
-        booksViewModel.books.observe(this, Observer { newBooks ->
-            newBooks.let {
-                adapter.setData(newBooks!!)
-            }
-        })
 
         // Add books
         fab_add_book.setOnClickListener {
-            booksViewModel.createBook()
+            mViewModel?.createBook()
         }
 
         setTitle()
-
     }
 
     private fun setTitle() {
