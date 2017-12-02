@@ -18,7 +18,7 @@ class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         db = Room.databaseBuilder(applicationContext,
-                AppDatabase::class.java, "database-name").build()
+                AppDatabase::class.java, "database-name").fallbackToDestructiveMigration().build()
     }
 
 }

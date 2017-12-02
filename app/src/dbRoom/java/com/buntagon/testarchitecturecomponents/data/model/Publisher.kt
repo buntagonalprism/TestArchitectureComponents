@@ -18,6 +18,10 @@ open class Publisher : SyncedItem {
     var employeeCount: Int = 0
     var stockPrice : Float = 0.0f
 
+
+
+
+
     @PrimaryKey
     @NonNull
     private var id: String = UUID.randomUUID().toString()

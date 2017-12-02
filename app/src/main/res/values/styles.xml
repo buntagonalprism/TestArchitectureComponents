@@ -17,6 +17,13 @@
         <!-- Apply a default style for the colour of title text in toolbars -->
         <item name="titleTextColor">@android:color/white</item>
 
+        <!-- Colour the overflow actions icon the same colour -->
+        <item name="actionOverflowButtonStyle">@style/MyOverflowButtonStyle</item>
+
+    </style>
+
+    <style name="MyOverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tint">@android:color/white</item>
     </style>
 
 

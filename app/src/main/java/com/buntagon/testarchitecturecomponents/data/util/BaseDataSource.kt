@@ -15,7 +15,7 @@ interface BaseDataSource<T : SyncedItem> {
 
     fun insertOrUpdate(items: List<T>)
 
-    fun delete(book: Book)
+    fun delete(item: T)
 
     operator fun get(id: String): StaticLiveData<T>
 

@@ -11,10 +11,14 @@ import java.util.*
  * Created by Alex on 17/11/2017.
  */
 @Entity
-open class Author : SyncedItem {
+open class AuthorDetails : SyncedItem {
 
     var name: String = ""
     var age: Int = 0
+
+
+
+
 
     @PrimaryKey
     @NonNull

@@ -15,21 +15,27 @@ import java.util.List;
  */
 @Dao
 public interface AuthorDao {
-    @Query("select * from Author")
-    LiveData<List<Author>> getAllAuthors();
+    @Query("select * from AuthorDetails")
+    LiveData<List<AuthorDetails>> getAllAuthorDetails();
 
-    @Query("select * from Author where id = :id")
+    @Query("select * from AuthorDetails where id = :id")
+    LiveData<AuthorDetails> getAuthorDetails(String id);
+
+    @Query("select * from AuthorDetails where id = :id")
     LiveData<Author> getAuthor(String id);
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
-    void insert(Author author);
+    void insert(AuthorDetails author);
 
     @Insert
-    void insertAll(List<Author> authors);
+    void insertAll(List<AuthorDetails> authors);
 
     @Delete
-    void delete(Author author);
+    void delete(AuthorDetails author);
 
-    @Query("select * from Author where name like :authorName")
-    LiveData<List<Author>> searchAuthors(String authorName);
+    @Query("select * from AuthorDetails where name like :authorName")
+    LiveData<List<AuthorDetails>> searchAuthors(String authorName);
+
+    @Query("select name from AuthorDetails")
+    LiveData<List<String>> allAuthorNames();
 }

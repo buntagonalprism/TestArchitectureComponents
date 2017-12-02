@@ -1,5 +1,6 @@
 package com.buntagon.testarchitecturecomponents.ui.authors
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -17,6 +18,25 @@ import kotlinx.android.synthetic.main.fragment_authors.*
  */
 class AuthorsFragment : Fragment() {
 
+    private var mViewModel : AuthorsViewModel? = null
+    private var mAdapter : AuthorsAdapter? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Get the view model
+        mViewModel = ViewModelProviders.of(activity).get(AuthorsViewModel::class.java)
+
+        mAdapter = AuthorsAdapter { author ->
+            mViewModel?.editAuthor(author.id)
+        }
+
+        mViewModel?.authors?.observe(this, Observer { authors ->
+            mAdapter?.setData(authors)
+        })
+
+    }
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater!!.inflate(R.layout.fragment_authors, container, false)
@@ -25,13 +45,8 @@ class AuthorsFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Get the view model
-        val viewModel = ViewModelProviders.of(activity).get(AuthorsViewModel::class.java)
-
         rv_authors.layoutManager = LinearLayoutManager(view?.context)
-        rv_authors.adapter = AuthorsAdapter(viewModel.authors.value!!) { author ->
-            activity.shortToast("Pressed author: " + author.name)
-        }
+        rv_authors.adapter = mAdapter
 
         setTitle()
     }
@@ -40,5 +55,7 @@ class AuthorsFragment : Fragment() {
         val activityViewModel = ViewModelProviders.of(activity).get(MainActivityViewModel::class.java)
         activityViewModel.activityTitle.value = resources.getString(R.string.title_authors_list)
     }
+
+
 
 }

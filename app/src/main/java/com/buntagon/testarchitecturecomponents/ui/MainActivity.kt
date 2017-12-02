@@ -2,16 +2,20 @@ package com.buntagon.testarchitecturecomponents.ui
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import com.buntagon.testarchitecturecomponents.R
 import com.buntagon.testarchitecturecomponents.ui.addbook.AddEditBookFragment
+import com.buntagon.testarchitecturecomponents.ui.authordetails.AddEditAuthorFragment
 import com.buntagon.testarchitecturecomponents.ui.authors.AuthorsFragment
 import com.buntagon.testarchitecturecomponents.ui.authors.AuthorsViewModel
 import com.buntagon.testarchitecturecomponents.ui.library.LibraryFragment
 import com.buntagon.testarchitecturecomponents.ui.library.LibraryViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+import android.content.Context.INPUT_METHOD_SERVICE
+import android.view.inputmethod.InputMethodManager
 
 
 class MainActivity : AppCompatActivity() {
@@ -67,8 +71,21 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+
     private fun setupAuthorObservers() {
         val authorViewModel = ViewModelProviders.of(this).get(AuthorsViewModel::class.java)
+
+        authorViewModel.createEvent.observe(this, Observer {
+            loadInnerFragment(AddEditAuthorFragment())
+        })
+
+        authorViewModel.editEvent.observe(this, Observer {
+            loadInnerFragment(AddEditAuthorFragment())
+        })
+
+        authorViewModel.saveCompleteEvent.observe(this, Observer {
+            onBackPressed()
+        })
     }
 
 
@@ -95,6 +112,7 @@ class MainActivity : AppCompatActivity() {
         // Super call will pop fragment back-stack or close app if there is no back-stack
         super.onBackPressed()
         toolbar?.showDrawerToggle()
+        hideKeyboard()
     }
 
     private fun loadInnerFragment(newFragment: Fragment) {
@@ -120,6 +138,9 @@ class MainActivity : AppCompatActivity() {
      */
     private fun loadFragment(newFragment: Fragment, popExisting : Boolean = true, addToBackStack : Boolean = true) {
 
+        // We don't want the keyboard to stay open while moving between fragments
+        hideKeyboard()
+
         // Use the fragment class name as an identifier for finding it in the back stack
         val fragmentName = newFragment.javaClass.name
 
@@ -140,6 +161,13 @@ class MainActivity : AppCompatActivity() {
 
             // Commit the transaction
             transaction.commit()
+        }
+    }
+
+    private fun hideKeyboard() {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        if (currentFocus != null) {
+            imm.hideSoftInputFromWindow(currentFocus.windowToken, 0)
         }
     }
 

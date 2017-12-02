@@ -20,6 +20,8 @@ open class Book : SyncedItem {
     var wordCount : Int = -1
     var price : Float = -1.0f
     var description : String = ""
+    var authorId : String = ""
+
 
     @PrimaryKey @NonNull
     private var id: String = UUID.randomUUID().toString()

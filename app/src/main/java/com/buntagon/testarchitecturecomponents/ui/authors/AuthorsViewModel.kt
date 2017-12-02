@@ -3,28 +3,51 @@ package com.buntagon.testarchitecturecomponents.ui.authors
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import com.buntagon.testarchitecturecomponents.data.model.Author
+import com.buntagon.testarchitecturecomponents.data.model.AuthorDetails
+import com.buntagon.testarchitecturecomponents.data.model.Book
+import com.buntagon.testarchitecturecomponents.data.source.AuthorRepository
+import com.buntagon.testarchitecturecomponents.util.SingleLiveEvent
 
 /**
  * View model for the authors fragment
  * Created by Alex on 29/11/2017.
  */
 class AuthorsViewModel : ViewModel() {
+    private val mAuthorRepo = AuthorRepository()
 
-    val authors : LiveData<MutableList<Author>>
+    val authors = mAuthorRepo.getAll()
 
-    init {
-        val authorsList = ArrayList<Author>()
-        val author1 = Author()
-        author1.name = "J.K. Rowling"
-        author1.age = 36
-        authorsList.add(author1)
-        val author2 = Author()
-        author2.name = "Eoin Colfter"
-        author2.age = 28
-        authorsList.add(author2)
-        authors = MutableLiveData<MutableList<Author>>()
-        authors.value = authorsList
+    val saveCompleteEvent = SingleLiveEvent<Void>()
+    val editEvent = SingleLiveEvent<Void>()
+    val createEvent = SingleLiveEvent<Void>()
+
+    private var selectedAuthor: LiveData<AuthorDetails> = MutableLiveData<AuthorDetails>()
+
+    fun getSelected() : LiveData<AuthorDetails> {
+        return selectedAuthor
+    }
+    fun editAuthor(id: String) {
+        selectedAuthor = mAuthorRepo[id].editable
+        editEvent.call()
     }
 
+    fun createAuthor() {
+        selectedAuthor = MutableLiveData<AuthorDetails>()
+        createEvent.call()
+    }
+
+    fun delete(authorDetails: AuthorDetails) {
+        mAuthorRepo.delete(authorDetails)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        mAuthorRepo.close()
+    }
+
+    fun saveAuthor(authorDetails: AuthorDetails) {
+        mAuthorRepo.insertOrUpdate(authorDetails)
+        saveCompleteEvent.call()
+        selectedAuthor = MutableLiveData<AuthorDetails>()
+    }
 }
