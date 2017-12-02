@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-//    private var mDrawerToggle: BackAnimatedDrawerToggle? = null
+    private val popBackStackToFragmentFlags = 0      // Alternative is to pop beyond the selected fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         if (currentFragment == null) {
             // Don't add the default fragment to the backstack, otherwise the system back button
             // will remove it and leave an empty screen
-            loadFragment(LibraryFragment(), false)
+            loadFragment(LibraryFragment(), addToBackStack = false)
         }
     }
 
@@ -98,28 +98,49 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadInnerFragment(newFragment: Fragment) {
-        loadFragment(newFragment, true)
+        loadFragment(newFragment)
         toolbar?.showBackArrow()
     }
 
     private fun loadOuterFragment(newFragment: Fragment) {
-        loadFragment(newFragment, true)
+        loadFragment(newFragment)
         toolbar?.showDrawerToggle()
     }
 
 
-    private fun loadFragment(newFragment: Fragment, addToBackStack : Boolean) {
-        val transaction = supportFragmentManager.beginTransaction()
+    /**
+     * Load a new fragment into the activity
+     *
+     * @param newFragment Fragment to add to the activity
+     * @param popExisting whether to pop an existing fragment from the back stack with the same
+     * class name as the one being added. Useful for navigating back and forth between master
+     * fragments e.g. using a navigation drawer, to prevent a large stack
+     * @param addToBackStack Whether to add the fragment to the back stack. Useful for initally
+     * added fragment
+     */
+    private fun loadFragment(newFragment: Fragment, popExisting : Boolean = true, addToBackStack : Boolean = true) {
 
-        // Replace whatever is in the fragment_container view with this fragment,
-        transaction.replace(R.id.contentFrame, newFragment)
+        // Use the fragment class name as an identifier for finding it in the back stack
+        val fragmentName = newFragment.javaClass.name
 
-        // Add the transaction to the back stack if required
-        if (addToBackStack)
-            transaction.addToBackStack(null)
+        // Pop a fragment from the back stack if one is present with a matching name
+        var fragToPop = false
+        if (popExisting) {
+            fragToPop = supportFragmentManager.popBackStackImmediate(fragmentName, popBackStackToFragmentFlags)
+        }
 
-        // Commit the transaction
-        transaction.commit()
+        // If we are not popping backstack, or there was no fragment to pop, replace fragment in
+        // transaction
+        if (!popExisting || !fragToPop) {
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.contentFrame, newFragment)
+            // Add the transaction to the back stack if required
+            if (addToBackStack)
+                transaction.addToBackStack(fragmentName)
+
+            // Commit the transaction
+            transaction.commit()
+        }
     }
 
 
