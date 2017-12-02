@@ -48,6 +48,10 @@ class AuthorsFragment : Fragment() {
         rv_authors.layoutManager = LinearLayoutManager(view?.context)
         rv_authors.adapter = mAdapter
 
+        fab_add_author.setOnClickListener {
+            mViewModel?.createAuthor()
+        }
+
         setTitle()
     }
 

@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.view.inputmethod.InputMethodManager
 import com.buntagon.testarchitecturecomponents.R
 import com.buntagon.testarchitecturecomponents.ui.addbook.AddEditBookFragment
 import com.buntagon.testarchitecturecomponents.ui.authordetails.AddEditAuthorFragment
@@ -14,8 +15,6 @@ import com.buntagon.testarchitecturecomponents.ui.authors.AuthorsViewModel
 import com.buntagon.testarchitecturecomponents.ui.library.LibraryFragment
 import com.buntagon.testarchitecturecomponents.ui.library.LibraryViewModel
 import kotlinx.android.synthetic.main.activity_main.*
-import android.content.Context.INPUT_METHOD_SERVICE
-import android.view.inputmethod.InputMethodManager
 
 
 class MainActivity : AppCompatActivity() {

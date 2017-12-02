@@ -4,7 +4,6 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.buntagon.testarchitecturecomponents.data.model.AuthorDetails
-import com.buntagon.testarchitecturecomponents.data.model.Book
 import com.buntagon.testarchitecturecomponents.data.source.AuthorRepository
 import com.buntagon.testarchitecturecomponents.util.SingleLiveEvent
 
