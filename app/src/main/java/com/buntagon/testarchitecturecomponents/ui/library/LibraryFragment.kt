@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.buntagon.testarchitecturecomponents.R
-import com.buntagon.testarchitecturecomponents.data.model.Book
+import com.buntagon.testarchitecturecomponents.data.model.BookDetails
 import com.buntagon.testarchitecturecomponents.ui.MainActivityViewModel
 import kotlinx.android.synthetic.main.fragment_books.*
 
@@ -30,11 +30,11 @@ class LibraryFragment : Fragment() {
         mViewModel = ViewModelProviders.of(activity).get(LibraryViewModel::class.java)
 
         // Set the item click listener
-        val selectListener : (Book) -> Unit = { book ->
+        val selectListener : (BookDetails) -> Unit = { book ->
             mViewModel?.editBook(book.id)
         }
 
-        val deleteListener: (Book) -> Unit = { book ->
+        val deleteListener: (BookDetails) -> Unit = { book ->
             mViewModel?.delete(book)
         }
 

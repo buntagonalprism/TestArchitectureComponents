@@ -1,6 +1,7 @@
 package com.buntagon.testarchitecturecomponents.data.model
 
 import android.arch.persistence.room.Entity
+import android.arch.persistence.room.ForeignKey
 import android.arch.persistence.room.PrimaryKey
 import android.support.annotation.NonNull
 import com.buntagon.testarchitecturecomponents.data.util.SyncedItem
@@ -11,8 +12,10 @@ import java.util.*
  * Model for storing book data
  * Created by Alex on 17/11/2017.
  */
-@Entity
-open class Book : SyncedItem {
+@Entity( foreignKeys = [
+        ForeignKey(entity = AuthorDetails::class, parentColumns = arrayOf("id"), childColumns = arrayOf("authorId"))
+])
+open class BookDetails : SyncedItem {
 
     var title : String = ""
     var author : String = ""

@@ -1,6 +1,6 @@
 package com.buntagon.testarchitecturecomponents.data.source.remote;
 
-import com.buntagon.testarchitecturecomponents.data.model.Book;
+import com.buntagon.testarchitecturecomponents.data.model.BookDetails;
 
 import java.util.List;
 
@@ -15,6 +15,6 @@ import retrofit2.http.GET;
 public interface BookApi {
 
     @GET("books")
-    Call<List<Book>> listBooks();
+    Call<List<BookDetails>> listBooks();
 
 }

@@ -8,13 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.buntagon.testarchitecturecomponents.R
-import com.buntagon.testarchitecturecomponents.data.model.Book
+import com.buntagon.testarchitecturecomponents.data.model.BookDetails
 import com.buntagon.testarchitecturecomponents.ui.MainActivityViewModel
 import com.buntagon.testarchitecturecomponents.ui.library.LibraryViewModel
 import kotlinx.android.synthetic.main.fragment_add_edit_book.*
-import android.widget.AutoCompleteTextView
 import android.widget.ArrayAdapter
-
+import com.buntagon.testarchitecturecomponents.data.model.AuthorDetails
 
 
 /**
@@ -22,7 +21,8 @@ import android.widget.ArrayAdapter
  */
 class AddEditBookFragment : Fragment() {
 
-    private var book = Book()
+    private var mSelectedAuthor : AuthorDetails? = null
+    private var book = BookDetails()
     private var mViewModel : LibraryViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,11 +42,16 @@ class AddEditBookFragment : Fragment() {
             }
         })
 
-        mViewModel?.authorNames?.observe(this, Observer { authors ->
+        mViewModel?.authors?.observe(this, Observer { authors ->
             authors?.let {
                 val adapter = ArrayAdapter<String>(activity,
-                        android.R.layout.simple_dropdown_item_1line, authors)
-                et_author.setAdapter<ArrayAdapter<String>>(adapter)
+                        android.R.layout.simple_dropdown_item_1line,
+                        authors.map { author -> author.name })
+                et_author.setAdapter(adapter)
+
+                et_author.setOnItemClickListener { _, _, position, _ ->
+                    mSelectedAuthor = authors[position]
+                }
             }
         })
     }
@@ -66,6 +71,8 @@ class AddEditBookFragment : Fragment() {
             book.title = et_title.text.toString()
             book.author = et_author.text.toString()
             book.description = et_description.text.toString()
+            book.author = mSelectedAuthor?.name ?: ""
+            book.authorId = mSelectedAuthor?.id ?: ""
             mViewModel?.saveBook(book)
         }
     }

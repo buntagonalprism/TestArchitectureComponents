@@ -10,26 +10,31 @@ import android.arch.persistence.room.Query;
 import java.util.List;
 
 /**
- * Interface data access object for working with Book objects
+ * Interface data access object for working with BookDetails objects
  * Created by t on 25/11/2017.
  */
 @Dao
 public interface BookDao {
-    @Query("select * from Book order by title")
-    LiveData<List<Book>> getAllBooks();
+    @Query("select * from BookDetails order by title")
+    LiveData<List<BookDetails>> getAllBooks();
 
-    @Query("select * from Book where id = :id")
-    LiveData<Book> getBook(String id);
+    @Query("select * from BookDetails where id = :id")
+    LiveData<BookDetails> getBook(String id);
+
+    @Query("select BookDetails.*, AuthorDetails.id as authorId2, AuthorDetails.name as authorName2 from BookDetails join AuthorDetails on BookDetails.authorId = AuthorDetails.id where BookDetails.id = :id ")
+    LiveData<Book> getBookWithAuthor(String id);
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
-    void insert(Book book);
+    void insert(BookDetails book);
 
     @Insert
-    void insertAll(List<Book> books);
+    void insertAll(List<BookDetails> books);
 
     @Delete
-    void delete(Book book);
+    void delete(BookDetails book);
 
-    @Query("select * from Book where title like :title")
-    LiveData<List<Book>> searchBooks(String title);
+    @Query("select * from BookDetails where title like :title")
+    LiveData<List<BookDetails>> searchBooks(String title);
+
+
 }

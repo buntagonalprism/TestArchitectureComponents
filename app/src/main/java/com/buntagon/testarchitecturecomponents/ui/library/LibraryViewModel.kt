@@ -3,7 +3,7 @@ package com.buntagon.testarchitecturecomponents.ui.library
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import com.buntagon.testarchitecturecomponents.data.model.Book
+import com.buntagon.testarchitecturecomponents.data.model.BookDetails
 import com.buntagon.testarchitecturecomponents.data.source.AuthorRepository
 import com.buntagon.testarchitecturecomponents.data.source.BookRepository
 import com.buntagon.testarchitecturecomponents.data.util.StaticListLiveData
@@ -18,16 +18,17 @@ class LibraryViewModel : ViewModel() {
     private val mRepository = BookRepository()
     private val mAuthorRepo = AuthorRepository()
 
+    val authors = mAuthorRepo.getAll()
     val authorNames = mAuthorRepo.allAuthorNames
-    val books : StaticListLiveData<Book> = mRepository.getAll()
+    val books : StaticListLiveData<BookDetails> = mRepository.getAll()
 
     val saveCompleteEvent = SingleLiveEvent<Void>()
     val editEvent = SingleLiveEvent<Void>()
     val createEvent = SingleLiveEvent<Void>()
 
-    private var selectedBook : LiveData<Book> = MutableLiveData<Book>()
+    private var selectedBook : LiveData<BookDetails> = MutableLiveData<BookDetails>()
 
-    fun getSelected() : LiveData<Book> {
+    fun getSelected() : LiveData<BookDetails> {
         return selectedBook
     }
     fun editBook(id: String) {
@@ -36,11 +37,11 @@ class LibraryViewModel : ViewModel() {
     }
 
     fun createBook() {
-        selectedBook = MutableLiveData<Book>()
+        selectedBook = MutableLiveData<BookDetails>()
         createEvent.call()
     }
 
-    fun delete(book: Book) {
+    fun delete(book: BookDetails) {
         mRepository.delete(book)
     }
 
@@ -49,10 +50,10 @@ class LibraryViewModel : ViewModel() {
         mRepository.close()
     }
 
-    fun saveBook(book: Book) {
+    fun saveBook(book: BookDetails) {
         mRepository.insertOrUpdate(book)
         saveCompleteEvent.call()
-        selectedBook = MutableLiveData<Book>()
+        selectedBook = MutableLiveData<BookDetails>()
     }
 
 

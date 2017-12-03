@@ -1,7 +1,5 @@
 package com.buntagon.testarchitecturecomponents.data.util
 
-import com.buntagon.testarchitecturecomponents.data.model.Book
-
 /**
  * Common functions exposed by data sources for a data model class
  * Created by Alex on 19/11/2017.

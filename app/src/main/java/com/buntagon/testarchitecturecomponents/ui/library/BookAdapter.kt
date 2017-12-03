@@ -5,21 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.buntagon.testarchitecturecomponents.R
-import com.buntagon.testarchitecturecomponents.data.model.Book
+import com.buntagon.testarchitecturecomponents.data.model.BookDetails
 import kotlinx.android.synthetic.main.item_book.view.*
 
 /**
 
  */
-class BookAdapter(private val mSelectListener: (Book) -> Unit, private val mDeleteListener: (Book) -> Unit) : RecyclerView.Adapter<BookAdapter.ViewHolder>() {
+class BookAdapter(private val mSelectListener: (BookDetails) -> Unit, private val mDeleteListener: (BookDetails) -> Unit) : RecyclerView.Adapter<BookAdapter.ViewHolder>() {
 
-    private var mValues: List<Book> = ArrayList()
+    private var mValues: List<BookDetails> = ArrayList()
 
     override fun getItemCount(): Int {
         return mValues.size
     }
 
-    fun setData(newBooks: List<Book>) {
+    fun setData(newBooks: List<BookDetails>) {
         mValues = newBooks
 //        notifyDataSetChanged()
     }
@@ -37,7 +37,7 @@ class BookAdapter(private val mSelectListener: (Book) -> Unit, private val mDele
 
     inner class ViewHolder(private val mView: View) : RecyclerView.ViewHolder(mView)  {
 
-        fun bind(book: Book) = with (mView) {
+        fun bind(book: BookDetails) = with (mView) {
             tv_title.text = book.title
             tv_description.text = book.description
             ll_content.setOnClickListener {

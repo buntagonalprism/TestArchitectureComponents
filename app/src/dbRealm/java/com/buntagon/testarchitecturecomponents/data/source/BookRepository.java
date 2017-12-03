@@ -3,7 +3,7 @@ package com.buntagon.testarchitecturecomponents.data.source;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.buntagon.testarchitecturecomponents.data.model.Book;
+import com.buntagon.testarchitecturecomponents.data.model.BookDetails;
 import com.buntagon.testarchitecturecomponents.data.model.BookFields;
 import com.buntagon.testarchitecturecomponents.data.source.remote.BookApi;
 import com.buntagon.testarchitecturecomponents.data.util.BaseRepository;

@@ -10,7 +10,7 @@ import android.arch.persistence.room.Query;
 import java.util.List;
 
 /**
- * Interface data access object for working with Book objects
+ * Interface data access object for working with BookDetails objects
  * Created by t on 25/11/2017.
  */
 @Dao
