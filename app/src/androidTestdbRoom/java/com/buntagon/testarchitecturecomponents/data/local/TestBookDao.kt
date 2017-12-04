@@ -5,9 +5,8 @@ import android.arch.lifecycle.Observer
 import android.arch.persistence.room.Room
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
+import com.buntagon.testarchitecturecomponents.data.model.*
 
-import com.buntagon.testarchitecturecomponents.data.model.AuthorDetails
-import com.buntagon.testarchitecturecomponents.data.model.BookDetails
 import com.buntagon.testarchitecturecomponents.data.util.AppDatabase
 
 import org.junit.After
@@ -27,6 +26,8 @@ import java.util.concurrent.TimeUnit
 class TestBookDao {
 
     private var mDatabase: AppDatabase? = null
+    private var mBookDao: BookDao? = null
+    private var mAuthorDao: AuthorDao? = null
 
     @Before
     fun initDb() {
@@ -34,6 +35,8 @@ class TestBookDao {
         // process is killed
         mDatabase = Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getContext(),
                 AppDatabase::class.java).build()
+        mBookDao = mDatabase!!.bookDao()
+        mAuthorDao = mDatabase!!.authorDao()
         seedData()
     }
 
@@ -51,22 +54,20 @@ class TestBookDao {
         val authors = ArrayList<AuthorDetails>()
         authors.add(author1)
 
-        mDatabase!!.authorDao().insertAll(authors)
+        mAuthorDao?.insertAll(authors)
 
         val book = BookDetails()
         book.title = "A Game of Thrones"
         book.description = "The first epic book about people wanting to sit on a spiky chair"
-        book.author = author1.name
         book.authorId = author1.id
         val book2 = BookDetails()
         book2.title = "A Storm of Swords"
         book2.description = "The weather gets a little dangerous when it literally starts raining weapons"
-        book2.author = author1.name
         book2.authorId = author1.id
         val books = ArrayList<BookDetails>()
         books.add(book)
         books.add(book2)
-        mDatabase!!.bookDao().insertAll(books)
+        mBookDao?.insertAll(books)
 
     }
 
@@ -80,13 +81,12 @@ class TestBookDao {
 
     @Test
     fun loadBookWithAuthor() {
-        val bookDao = mDatabase!!.bookDao()
-        val books = bookDao.allBooks.blockingObserver()
+        val books = mBookDao!!.allBooks.blockingObserver()
+        val authors = mAuthorDao!!.allAuthorDetails.blockingObserver()
         Assert.assertNotEquals(books?.size, 0)
         books?.let {
             val book = books[0]
-            val bookWithAuthor = bookDao.getBookWithAuthor(book.id).blockingObserver()
-            Assert.assertEquals(book.author, bookWithAuthor?.authorName2)
+            val bookWithAuthor = mBookDao!!.getBookWithAuthor(book.id).blockingObserver()
         }
     }
 
@@ -101,6 +101,27 @@ class TestBookDao {
             Assert.assertEquals(authorWithBooks?.books?.size, 2)
 
         }
+    }
+
+    @Test
+    fun insertBookWithAuthor() {
+        val bookDao = mDatabase!!.bookDao()
+        val authorDoa = mDatabase!!.authorDao()
+        val authors = authorDoa.allAuthorDetails.blockingObserver()
+        authors?.let {
+            val book = BookWithAuthor()
+            book.authorId = authors[0].id
+            book.title = "This is a test book"
+            bookDao.insert(book)
+        }
+        val books = bookDao.allBooks.blockingObserver()
+        Assert.assertEquals(books?.size, 3)
+
+    }
+
+    @Test
+    fun getBooksWithAuthors() {
+
     }
 
     /**

@@ -2,6 +2,7 @@ package com.buntagon.testarchitecturecomponents.data.model
 
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.ForeignKey
+import android.arch.persistence.room.Index
 import android.arch.persistence.room.PrimaryKey
 import android.support.annotation.NonNull
 import com.buntagon.testarchitecturecomponents.data.util.SyncedItem
@@ -14,11 +15,10 @@ import java.util.*
  */
 @Entity( foreignKeys = [
         ForeignKey(entity = AuthorDetails::class, parentColumns = arrayOf("id"), childColumns = arrayOf("authorId"))
-])
+], indices = [(Index(value = ["authorId"]))])
 open class BookDetails : SyncedItem {
 
     var title : String = ""
-    var author : String = ""
     var published : Date = Date()
     var wordCount : Int = -1
     var price : Float = -1.0f

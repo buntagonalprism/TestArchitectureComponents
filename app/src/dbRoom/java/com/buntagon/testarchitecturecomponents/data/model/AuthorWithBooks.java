@@ -1,6 +1,7 @@
 package com.buntagon.testarchitecturecomponents.data.model;
 
 import android.arch.persistence.room.Relation;
+import android.arch.persistence.room.Transaction;
 
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
  * Created by t on 2/12/2017.
  */
 
-public class Author extends AuthorDetails {
+public class AuthorWithBooks extends AuthorDetails {
 
     // This one to many relationship actually worked very well. By extending author details, this
     // POJO was able to pull out all of the fields from the AuthorDetails table and include them

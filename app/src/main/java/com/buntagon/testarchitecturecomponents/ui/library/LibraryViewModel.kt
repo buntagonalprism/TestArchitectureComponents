@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.buntagon.testarchitecturecomponents.data.model.BookDetails
+import com.buntagon.testarchitecturecomponents.data.model.BookWithAuthor
 import com.buntagon.testarchitecturecomponents.data.source.AuthorRepository
 import com.buntagon.testarchitecturecomponents.data.source.BookRepository
 import com.buntagon.testarchitecturecomponents.data.util.StaticListLiveData
@@ -19,25 +20,24 @@ class LibraryViewModel : ViewModel() {
     private val mAuthorRepo = AuthorRepository()
 
     val authors = mAuthorRepo.getAll()
-    val authorNames = mAuthorRepo.allAuthorNames
-    val books : StaticListLiveData<BookDetails> = mRepository.getAll()
+    val books : StaticListLiveData<BookWithAuthor> = mRepository.getBooksWithAuthors()
 
     val saveCompleteEvent = SingleLiveEvent<Void>()
     val editEvent = SingleLiveEvent<Void>()
     val createEvent = SingleLiveEvent<Void>()
 
-    private var selectedBook : LiveData<BookDetails> = MutableLiveData<BookDetails>()
+    private var selectedBook : LiveData<BookWithAuthor> = MutableLiveData<BookWithAuthor>()
 
-    fun getSelected() : LiveData<BookDetails> {
+    fun getSelected() : LiveData<BookWithAuthor> {
         return selectedBook
     }
     fun editBook(id: String) {
-        selectedBook = mRepository[id].editable
+        selectedBook = mRepository.getBookWithAuthor(id).editable
         editEvent.call()
     }
 
     fun createBook() {
-        selectedBook = MutableLiveData<BookDetails>()
+        selectedBook = MutableLiveData<BookWithAuthor>()
         createEvent.call()
     }
 
@@ -50,10 +50,10 @@ class LibraryViewModel : ViewModel() {
         mRepository.close()
     }
 
-    fun saveBook(book: BookDetails) {
+    fun saveBook(book: BookWithAuthor) {
         mRepository.insertOrUpdate(book)
         saveCompleteEvent.call()
-        selectedBook = MutableLiveData<BookDetails>()
+        selectedBook = MutableLiveData<BookWithAuthor>()
     }
 
 

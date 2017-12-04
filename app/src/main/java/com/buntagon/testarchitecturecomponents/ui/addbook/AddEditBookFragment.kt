@@ -8,12 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.buntagon.testarchitecturecomponents.R
-import com.buntagon.testarchitecturecomponents.data.model.BookDetails
+import com.buntagon.testarchitecturecomponents.data.model.BookWithAuthor
+import com.buntagon.testarchitecturecomponents.data.util.ObjectStringAdapter
 import com.buntagon.testarchitecturecomponents.ui.MainActivityViewModel
 import com.buntagon.testarchitecturecomponents.ui.library.LibraryViewModel
 import kotlinx.android.synthetic.main.fragment_add_edit_book.*
-import android.widget.ArrayAdapter
-import com.buntagon.testarchitecturecomponents.data.model.AuthorDetails
 
 
 /**
@@ -21,8 +20,9 @@ import com.buntagon.testarchitecturecomponents.data.model.AuthorDetails
  */
 class AddEditBookFragment : Fragment() {
 
-    private var mSelectedAuthor : AuthorDetails? = null
-    private var book = BookDetails()
+    private var mSelectedAuthorName: String? = null
+    private var mSelectedAuthorId: String? = null
+    private var book = BookWithAuthor()
     private var mViewModel : LibraryViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,8 +35,10 @@ class AddEditBookFragment : Fragment() {
             editBook?.let {
                 book = editBook
                 et_title.setText(book.title)
-                et_author.setText(book.author)
                 et_description.setText(book.description)
+                et_author.setText(book.authorName)
+                mSelectedAuthorId = book.authorId
+                mSelectedAuthorName = book.authorName
                 et_publisher.setText(book.published.toString())
                 setTitle(R.string.title_book_edit)
             }
@@ -44,13 +46,17 @@ class AddEditBookFragment : Fragment() {
 
         mViewModel?.authors?.observe(this, Observer { authors ->
             authors?.let {
-                val adapter = ArrayAdapter<String>(activity,
-                        android.R.layout.simple_dropdown_item_1line,
-                        authors.map { author -> author.name })
+                val adapter = ObjectStringAdapter(activity,
+                        android.R.layout.simple_dropdown_item_1line, authors,
+                        { author -> author.name })
                 et_author.setAdapter(adapter)
-
                 et_author.setOnItemClickListener { _, _, position, _ ->
-                    mSelectedAuthor = authors[position]
+                    val selectedAuthor = adapter.getObjectItem(position)
+                    selectedAuthor?.let {
+                        mSelectedAuthorId = selectedAuthor.id
+                        mSelectedAuthorName = selectedAuthor.name
+                    }
+
                 }
             }
         })
@@ -68,12 +74,21 @@ class AddEditBookFragment : Fragment() {
         setTitle(R.string.title_book_create)
 
         bt_save.setOnClickListener {
-            book.title = et_title.text.toString()
-            book.author = et_author.text.toString()
-            book.description = et_description.text.toString()
-            book.author = mSelectedAuthor?.name ?: ""
-            book.authorId = mSelectedAuthor?.id ?: ""
-            mViewModel?.saveBook(book)
+
+            when {
+                et_title.text.toString().length < 3 -> {
+                    et_title.error = "Minimum 3 characters"
+                }
+                et_author.text.toString() != mSelectedAuthorName -> {
+                    et_author.error = "Select a valid author"
+                }
+                else -> {
+                    book.title = et_title.text.toString()
+                    book.description = et_description.text.toString()
+                    book.authorId = mSelectedAuthorId!!
+                    mViewModel?.saveBook(book)
+                }
+            }
         }
     }
 

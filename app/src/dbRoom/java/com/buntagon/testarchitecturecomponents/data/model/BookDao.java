@@ -21,8 +21,16 @@ public interface BookDao {
     @Query("select * from BookDetails where id = :id")
     LiveData<BookDetails> getBook(String id);
 
-    @Query("select BookDetails.*, AuthorDetails.id as authorId2, AuthorDetails.name as authorName2 from BookDetails join AuthorDetails on BookDetails.authorId = AuthorDetails.id where BookDetails.id = :id ")
-    LiveData<Book> getBookWithAuthor(String id);
+    @Query("select BookDetails.*, AuthorDetails.name as authorName " +
+            "from BookDetails " +
+            "join AuthorDetails on BookDetails.authorId = AuthorDetails.id " +
+            "where BookDetails.id = :id ")
+    LiveData<BookWithAuthor> getBookWithAuthor(String id);
+
+    @Query("select BookDetails.*, AuthorDetails.name as authorName " +
+            "from BookDetails " +
+            "join AuthorDetails on BookDetails.authorId = AuthorDetails.id")
+    LiveData<List<BookWithAuthor>> getBooksWithAuthors();
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     void insert(BookDetails book);

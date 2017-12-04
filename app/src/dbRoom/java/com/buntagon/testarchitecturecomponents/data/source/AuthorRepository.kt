@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData
 import com.buntagon.testarchitecturecomponents.MyApplication
 import com.buntagon.testarchitecturecomponents.data.model.AuthorDao
 import com.buntagon.testarchitecturecomponents.data.model.AuthorDetails
+import com.buntagon.testarchitecturecomponents.data.model.AuthorWithBooks
 import com.buntagon.testarchitecturecomponents.data.util.RoomLiveData
 import com.buntagon.testarchitecturecomponents.data.util.RoomLiveListData
 import com.buntagon.testarchitecturecomponents.data.util.StaticListLiveData
@@ -21,26 +22,6 @@ class AuthorRepository : AuthorDataSource {
     private val authorDao: AuthorDao = MyApplication.db!!.authorDao()
 
 
-   init {
-        getAll().observeForever { authors ->
-            if (authors != null && authors.size == 0) {
-                seedData()
-            }
-        }
-    }
-
-    private fun seedData() {
-        val authorsList = ArrayList<AuthorDetails>()
-        val author1 = AuthorDetails()
-        author1.name = "J.K. Rowling"
-        author1.age = 36
-        authorsList.add(author1)
-        val author2 = AuthorDetails()
-        author2.name = "Eoin Colfter"
-        author2.age = 28
-        authorsList.add(author2)
-        insertOrUpdate(authorsList)
-    }
 
     override fun insertOrUpdate(item: AuthorDetails) {
         item.lastUpdate = Date().time
@@ -76,6 +57,10 @@ class AuthorRepository : AuthorDataSource {
 
     override fun getAllAuthorNames(): LiveData<List<String>> {
         return authorDao.allAuthorNames()
+    }
+
+    fun getAuthorWithBooks(id: String) : StaticLiveData<AuthorWithBooks> {
+        return RoomLiveData(authorDao.getAuthor(id))
     }
 
     override fun searchAuthorNames(likeName: String?): LiveData<List<String>> {

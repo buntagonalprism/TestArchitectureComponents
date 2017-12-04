@@ -2,9 +2,10 @@ package com.buntagon.testarchitecturecomponents.data.source
 
 import android.arch.lifecycle.LiveData
 import com.buntagon.testarchitecturecomponents.MyApplication
-import com.buntagon.testarchitecturecomponents.data.model.Book
+import com.buntagon.testarchitecturecomponents.data.model.AuthorDetails
 import com.buntagon.testarchitecturecomponents.data.model.BookDetails
 import com.buntagon.testarchitecturecomponents.data.model.BookDao
+import com.buntagon.testarchitecturecomponents.data.model.BookWithAuthor
 import com.buntagon.testarchitecturecomponents.data.util.RoomLiveData
 import com.buntagon.testarchitecturecomponents.data.util.RoomLiveListData
 import com.buntagon.testarchitecturecomponents.data.util.StaticListLiveData
@@ -21,28 +22,7 @@ class BookRepository : BookDataSource {
 
     private val bookDao: BookDao = MyApplication.db!!.bookDao()
 
-    init {
-        getAll().observeForever { books ->
-            if (books != null && books.size == 0) {
-                seedData()
-            }
-        }
-    }
 
-    private fun seedData() {
-        val book = BookDetails()
-        book.title = "A Game of Thrones"
-        book.description = "The first epic book about people wanting to sit on a spiky chair"
-        book.author = "George RR Martin"
-        val book2 = BookDetails()
-        book2.title = "A Storm of Swords"
-        book2.description = "The weather gets a little dangerous when it literally starts raining weapons"
-        book2.author = "George RR Martin"
-        val books = ArrayList<BookDetails>()
-        books.add(book)
-        books.add(book2)
-        insertOrUpdate(books)
-    }
 
     override fun sync() {
 
@@ -64,9 +44,9 @@ class BookRepository : BookDataSource {
         }
     }
 
-    override fun delete(book: BookDetails) {
+    override fun delete(item: BookDetails) {
         launch {
-            bookDao.delete(book)
+            bookDao.delete(item)
         }
     }
 
@@ -75,8 +55,12 @@ class BookRepository : BookDataSource {
         return RoomLiveData(book)
     }
 
-    fun getBookWithAuthor(id: String): StaticLiveData<Book> {
-        val book : LiveData<Book> = bookDao.getBookWithAuthor(id)
+    fun getBooksWithAuthors() : StaticListLiveData<BookWithAuthor> {
+        return RoomLiveListData(bookDao.booksWithAuthors)
+    }
+
+    fun getBookWithAuthor(id: String): StaticLiveData<BookWithAuthor> {
+        val book : LiveData<BookWithAuthor> = bookDao.getBookWithAuthor(id)
         return RoomLiveData(book)
     }
 

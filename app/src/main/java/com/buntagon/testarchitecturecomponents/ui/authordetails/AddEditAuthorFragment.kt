@@ -7,8 +7,10 @@ import android.support.v4.app.Fragment
 import android.view.*
 import com.buntagon.testarchitecturecomponents.R
 import com.buntagon.testarchitecturecomponents.data.model.AuthorDetails
+import com.buntagon.testarchitecturecomponents.data.model.AuthorWithBooks
 import com.buntagon.testarchitecturecomponents.ui.MainActivityViewModel
 import com.buntagon.testarchitecturecomponents.ui.authors.AuthorsViewModel
+import com.buntagon.testarchitecturecomponents.util.longToast
 import kotlinx.android.synthetic.main.fragment_add_edit_author.*
 
 /**
@@ -16,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_add_edit_author.*
  */
 class AddEditAuthorFragment : Fragment() {
 
-    private var mAuthor = AuthorDetails()
+    private var mAuthor = AuthorWithBooks()
     private var mViewModel : AuthorsViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,8 +46,12 @@ class AddEditAuthorFragment : Fragment() {
                 return true
             }
             R.id.menu_delete -> {
-                mViewModel?.delete(mAuthor)
-                mViewModel?.saveCompleteEvent?.call()
+                if (mAuthor.books.size > 0) {
+                    activity.longToast("This author has books associated with them. Delete or reassign these books before deleting this author")
+                } else {
+                    mViewModel?.delete(mAuthor)
+                    mViewModel?.saveCompleteEvent?.call()
+                }
                 return true
             }
         }
