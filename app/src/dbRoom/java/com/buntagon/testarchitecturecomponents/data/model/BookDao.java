@@ -24,7 +24,8 @@ public interface BookDao {
     @Query("select BookDetails.*, AuthorDetails.name as authorName " +
             "from BookDetails " +
             "join AuthorDetails on BookDetails.authorId = AuthorDetails.id " +
-            "where BookDetails.id = :id ")
+            "where BookDetails.id = :id " +
+            "order by BookDetails.title")
     LiveData<BookWithAuthor> getBookWithAuthor(String id);
 
     @Query("select BookDetails.*, AuthorDetails.name as authorName " +
